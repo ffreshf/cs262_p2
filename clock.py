@@ -11,7 +11,17 @@ import random
 master = {} # where key is the username and value is list of lists where index 0 of list is online/offline status, index 1 of list is messages that are queued and index 2 of their client connection 
 idx_of_list_of_connections = 0
 msg_queue = []
-clock = 0
+
+class Clock:
+    def __init__(self):
+        self.time = 0
+    
+    def increment(self):
+        self.time += 1
+    
+    def getTime(self):
+        return self.time
+
 
 # thread always listening for incoming messages and appends them on the queue
 def consumer(conn):
@@ -22,11 +32,12 @@ def consumer(conn):
         time.sleep(0.01)
 
         data = conn.recv(1024)
-        print("msg received\n")
-        dataVal = data.decode('ascii')
-        print("msg received:", dataVal)
-        msg_queue.append(dataVal)
-        clock += 1
+        # i 
+        if data:
+            print("msg received\n")
+            dataVal = data.decode('ascii')
+            print("msg received:", dataVal)
+            msg_queue.append(dataVal)
 
 
 
@@ -35,46 +46,57 @@ def producer(portVal):
     port = int(portVal)
     s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     sleepVal = 1/random.randint(1,6)
+    clock = Clock()
     # sema acquire
     try:
         s.connect((host,port))
         print("Client-side connection success to port val:" + str(portVal) + "\n")
         logging.basicConfig(filename="machine" + str(port1) + ".log", level=logging.DEBUG)
         while True:
-            codeVal = str(code)
+            # opCode = str(code)
             time.sleep(sleepVal)
-            s.send(codeVal.encode('ascii'))
-            print("msg sent", codeVal)
+            # s.send(codeVal.encode('ascii'))
+            # print("msg sent", codeVal)
 
             if len(msg_queue) > 0:
-                msg = msg_queue.pop(0)
-                print("Message received from queue which now has size: " + str(len(msg_queue)) + " at system time: " + str(time.time()) + " and at logical clock time of:" + str(clock))
-                clock += 1
+                msg_queue.pop(0)
+                print("Message received from queue which now has size: " + str(len(msg_queue)) + " at system time: " + str(time.time()) + " and at logical clock time of:" + str(clock.getTime()))
+                clock.increment()
             else:
-                n = random.randint(1,10)
-                if n == 1:
+                code = random.randint(1,10)
+                # n = random.randint(1,10)
+                # if n == 1:
+                if code == 1:
                     # send to one of the other machines a message that is the local logical clock time
-                    master[port][idx_of_list_of_connections][0].send("Message from port " + str(port) + ": the logical clock time is: " + str(clock) + "\n." ) 
-                    logging.info("Val is 1. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock))
-                    clock += 1
+                   # master[port][idx_of_list_of_connections][0].send("Message from port " + str(port) + ": the logical clock time is: " + str(clock) + "\n." ) 
+                    print("Val is 1. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
+                    logging.info("Val is 1. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
+                    clock.increment()
                     # print("Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock))
-                elif n == 2:
+                # elif n == 2:
+                elif code == 2:
                     # send to the other machine a message that is the local logical clock time
-                    master[port][idx_of_list_of_connections][1].send("Message from port " + str(port) + ": the logical clock time is: " + str(clock) + "\n." ) 
-                    logging.info("Val is 2. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock))
-                    clock += 1
+                   # master[port][idx_of_list_of_connections][1].send("Message from port " + str(port) + ": the logical clock time is: " + str(clock) + "\n." ) 
+                    print("Val is 2. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
+                    logging.info("Val is 2. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
+                    clock.increment()
                     # print("Message sent: " + time.time() + ", " + clock)
-                elif n == 3:
-                    master[port][idx_of_list_of_connections][0].send("Message from port " + str(port) + ": the logical clock time is: " + str(clock) + "\n." ) 
-                    logging.info("Val is 3. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock))
-                    master[port][idx_of_list_of_connections][1].send("Message from port " + str(port) + ": the logical clock time is: " + str(clock) + "\n." ) 
-                    logging.info("Val is 3. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock))
+                # elif n == 3:
+                elif code == 3:
+                   # master[port][idx_of_list_of_connections][0].send("Message from port " + str(port) + ": the logical clock time is: " + str(clock) + "\n." ) 
+                    print("Val is " + str(code) + ". Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
+                    logging.info("Val is 3. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
+                   # master[port][idx_of_list_of_connections][1].send("Message from port " + str(port) + ": the logical clock time is: " + str(clock) + "\n." ) 
+                    print("Val is " + str(code) + ". Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
+
+                    logging.info("Val is 3. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
                     # send to both of the other virtual machines a message that is the logical clock time
-                    clock += 1
+                    clock.increment()
                     # print("Message sent: " + time.time() + ", " + clock)
                 else:
-                    logging.info("Val is " + str(n) + ". No message was sent and this is an internal event. The current system time is: " + str(time.time()) + " and with logical clock time of: " + str(clock))
-                    clock += 1
+                    print("Val is " + str(code) + ". No message was sent and this is an internal event. The current system time is: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
+                    logging.info("Val is " + str(code) + ". No message was sent and this is an internal event. The current system time is: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
+                    clock.increment()
                     # print("Message sent: " + time.time() + ", " + clock)
 
     except socket.error as e: print ("Error connecting producer: %s" % e)
@@ -91,12 +113,13 @@ def init_machine(config):
     while True:
         conn, addr = s.accept()
         # append list of connections to master
-        master[PORT][idx_of_list_of_connections].append(conn)
+        # master[PORT][idx_of_list_of_connections].append(conn)
         start_new_thread(consumer, (conn,))
 
 def machine(config):
     config.append(os.getpid())
-    global code
+    # global code
+
     # print(config)
     init_thread = Thread(target=init_machine, args=(config,))
     init_thread.start()
@@ -108,8 +131,8 @@ def machine(config):
     prod_thread = Thread(target=producer, args=(config[2],))
     prod_thread.start()
     
-    while True: 
-        code = random.randint(1,3)
+    # while True: 
+    #    code = random.randint(1,10)
 
 
 
