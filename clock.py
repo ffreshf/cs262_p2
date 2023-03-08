@@ -7,6 +7,7 @@ import time
 from threading import Thread 
 import logging
 import random
+import csv
 
 msg_queue = []
 msg_lock = threading.Lock()
@@ -52,6 +53,11 @@ def producer(source, consumerA, consumerB):
     global msg_queue
     global msg_lock
 
+    # setting up .csv configuration
+    output = open("log_" + str(source) + ".csv", "w")
+    writer = csv.writer(output)
+    writer.writerow(["machine", "speed", "globaltime", "clocktime"])
+
     # number of clock ticks per (real world) second for this machine
     ticks = random.randint(1,6)
     # corresponding sleep value
@@ -65,8 +71,10 @@ def producer(source, consumerA, consumerB):
     machineB = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 
     try:
+        # connects to one of the other machines
         machineA.connect((host, source))
         print("Process on port " + str(consumerA) + " successfully connected to port val:" + str(source) + "\n")
+        # connnects to the other machine
         machineB.connect((host, source))
         print("Process on port " + str(consumerB) + " successfully connected to port val:" + str(source) + "\n")
         
@@ -77,6 +85,8 @@ def producer(source, consumerA, consumerB):
         logging.info("Machine at port: " + str(source) + ". Clock speed: " + str(ticks) + " ticks per second.")
 
         while True:
+            writer.writerow([str(source), str(ticks), str(time.time()), str(clock.getTime())])
+
             time.sleep(sleepVal)
 
             # If there is a message in the message queue for the machine

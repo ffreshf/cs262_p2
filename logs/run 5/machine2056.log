@@ -1,0 +1,112 @@
+INFO:Machine at port: 2056. Clock speed: 2 ticks per second.
+INFO:Internal event. Global time: 1678290998.9153779. Clock time: 1.
+INFO:Internal event. Global time: 1678290999.4211671. Clock time: 2.
+INFO:Internal event. Global time: 1678290999.9218712. Clock time: 3.
+INFO:Message received. Global time: 1678291000.426879. Queue length: 0. Clock time: 4.
+INFO:Message sent to 4056. Global time: 1678291000.930166. Clock time: 5.
+INFO:Message received. Global time: 1678291001.435243. Queue length: 0. Clock time: 6.
+INFO:Message received. Global time: 1678291001.9399402. Queue length: 0. Clock time: 7.
+INFO:Message sent to 4056. Global time: 1678291002.441511. Clock time: 8.
+INFO:Internal event. Global time: 1678291002.942514. Clock time: 9.
+INFO:Internal event. Global time: 1678291003.444045. Clock time: 10.
+INFO:Message received. Global time: 1678291003.946579. Queue length: 0. Clock time: 11.
+INFO:Internal event. Global time: 1678291004.4473972. Clock time: 12.
+INFO:Message sent to 3056. Global time: 1678291004.948351. Clock time: 13.
+INFO:Internal event. Global time: 1678291005.45325. Clock time: 14.
+INFO:Internal event. Global time: 1678291005.95472. Clock time: 15.
+INFO:Message sent to 4056. Global time: 1678291006.4580202. Clock time: 16.
+INFO:Message received. Global time: 1678291006.96295. Queue length: 0. Clock time: 17.
+INFO:Internal event. Global time: 1678291007.468579. Clock time: 18.
+INFO:Internal event. Global time: 1678291007.970873. Clock time: 19.
+INFO:Internal event. Global time: 1678291008.472074. Clock time: 20.
+INFO:Message sent to 4056. Global time: 1678291008.9766269. Clock time: 21.
+INFO:Message sent to 3056. Global time: 1678291008.977045. Clock time: 21.
+INFO:Internal event. Global time: 1678291009.47774. Clock time: 22.
+INFO:Internal event. Global time: 1678291009.9811652. Clock time: 23.
+INFO:Message received. Global time: 1678291010.48673. Queue length: 1. Clock time: 24.
+INFO:Message received. Global time: 1678291010.99123. Queue length: 1. Clock time: 25.
+INFO:Message received. Global time: 1678291011.4919. Queue length: 0. Clock time: 26.
+INFO:Internal event. Global time: 1678291011.99724. Clock time: 27.
+INFO:Message received. Global time: 1678291012.498365. Queue length: 0. Clock time: 28.
+INFO:Message received. Global time: 1678291012.999295. Queue length: 0. Clock time: 29.
+INFO:Message received. Global time: 1678291013.502014. Queue length: 0. Clock time: 30.
+INFO:Internal event. Global time: 1678291014.005277. Clock time: 31.
+INFO:Message sent to 4056. Global time: 1678291014.5100229. Clock time: 32.
+INFO:Internal event. Global time: 1678291015.012377. Clock time: 33.
+INFO:Message received. Global time: 1678291015.5134652. Queue length: 0. Clock time: 34.
+INFO:Internal event. Global time: 1678291016.018789. Clock time: 35.
+INFO:Internal event. Global time: 1678291016.521526. Clock time: 36.
+INFO:Internal event. Global time: 1678291017.026279. Clock time: 37.
+INFO:Message received. Global time: 1678291017.5270028. Queue length: 0. Clock time: 38.
+INFO:Message received. Global time: 1678291018.0311959. Queue length: 0. Clock time: 39.
+INFO:Message received. Global time: 1678291018.532922. Queue length: 1. Clock time: 40.
+INFO:Message received. Global time: 1678291019.038644. Queue length: 1. Clock time: 41.
+INFO:Message received. Global time: 1678291019.539139. Queue length: 0. Clock time: 42.
+INFO:Internal event. Global time: 1678291020.0396612. Clock time: 43.
+INFO:Message received. Global time: 1678291020.545399. Queue length: 1. Clock time: 44.
+INFO:Message received. Global time: 1678291021.0512269. Queue length: 0. Clock time: 45.
+INFO:Internal event. Global time: 1678291021.555813. Clock time: 46.
+INFO:Internal event. Global time: 1678291022.056602. Clock time: 47.
+INFO:Internal event. Global time: 1678291022.5624619. Clock time: 48.
+INFO:Internal event. Global time: 1678291023.063376. Clock time: 49.
+INFO:Internal event. Global time: 1678291023.568943. Clock time: 50.
+INFO:Message sent to 4056. Global time: 1678291024.0715451. Clock time: 51.
+INFO:Message received. Global time: 1678291024.5731761. Queue length: 0. Clock time: 52.
+INFO:Message received. Global time: 1678291025.0763578. Queue length: 1. Clock time: 53.
+INFO:Message received. Global time: 1678291025.581826. Queue length: 0. Clock time: 54.
+INFO:Message sent to 4056. Global time: 1678291026.086432. Clock time: 55.
+INFO:Internal event. Global time: 1678291026.589756. Clock time: 56.
+INFO:Message received. Global time: 1678291027.093237. Queue length: 0. Clock time: 57.
+INFO:Message received. Global time: 1678291027.5946538. Queue length: 1. Clock time: 58.
+INFO:Message received. Global time: 1678291028.095571. Queue length: 0. Clock time: 59.
+INFO:Message sent to 4056. Global time: 1678291028.6015701. Clock time: 60.
+INFO:Message sent to 3056. Global time: 1678291029.107117. Clock time: 61.
+INFO:Message received. Global time: 1678291029.607782. Queue length: 0. Clock time: 62.
+INFO:Message received. Global time: 1678291030.1132648. Queue length: 1. Clock time: 63.
+INFO:Message received. Global time: 1678291030.614173. Queue length: 0. Clock time: 64.
+INFO:Internal event. Global time: 1678291031.119982. Clock time: 65.
+INFO:Message received. Global time: 1678291031.622036. Queue length: 1. Clock time: 66.
+INFO:Message received. Global time: 1678291032.1275609. Queue length: 0. Clock time: 67.
+INFO:Internal event. Global time: 1678291032.630242. Clock time: 68.
+INFO:Internal event. Global time: 1678291033.1358871. Clock time: 69.
+INFO:Message sent to 4056. Global time: 1678291033.637442. Clock time: 70.
+INFO:Message sent to 3056. Global time: 1678291033.6378639. Clock time: 70.
+INFO:Internal event. Global time: 1678291034.13884. Clock time: 71.
+INFO:Internal event. Global time: 1678291034.6403258. Clock time: 72.
+INFO:Message received. Global time: 1678291035.141883. Queue length: 0. Clock time: 73.
+INFO:Internal event. Global time: 1678291035.642735. Clock time: 74.
+INFO:Message sent to 3056. Global time: 1678291036.143703. Clock time: 75.
+INFO:Internal event. Global time: 1678291036.6452138. Clock time: 76.
+INFO:Internal event. Global time: 1678291037.1462889. Clock time: 77.
+INFO:Internal event. Global time: 1678291037.6477618. Clock time: 78.
+INFO:Message received. Global time: 1678291038.148669. Queue length: 0. Clock time: 79.
+INFO:Internal event. Global time: 1678291038.653192. Clock time: 80.
+INFO:Internal event. Global time: 1678291039.1581922. Clock time: 81.
+INFO:Message received. Global time: 1678291039.663606. Queue length: 1. Clock time: 82.
+INFO:Message received. Global time: 1678291040.164274. Queue length: 0. Clock time: 83.
+INFO:Message sent to 4056. Global time: 1678291040.669748. Clock time: 84.
+INFO:Message sent to 3056. Global time: 1678291040.670275. Clock time: 84.
+INFO:Message received. Global time: 1678291041.1746612. Queue length: 1. Clock time: 85.
+INFO:Message received. Global time: 1678291041.680539. Queue length: 2. Clock time: 86.
+INFO:Message received. Global time: 1678291042.181142. Queue length: 1. Clock time: 87.
+INFO:Message received. Global time: 1678291042.685451. Queue length: 1. Clock time: 88.
+INFO:Message received. Global time: 1678291043.191217. Queue length: 1. Clock time: 89.
+INFO:Message received. Global time: 1678291043.694189. Queue length: 0. Clock time: 90.
+INFO:Message received. Global time: 1678291044.1999629. Queue length: 1. Clock time: 91.
+INFO:Message received. Global time: 1678291044.705923. Queue length: 2. Clock time: 92.
+INFO:Message received. Global time: 1678291045.206935. Queue length: 1. Clock time: 93.
+INFO:Message received. Global time: 1678291045.71265. Queue length: 0. Clock time: 94.
+INFO:Message sent to 4056. Global time: 1678291046.2186081. Clock time: 95.
+INFO:Message received. Global time: 1678291046.724472. Queue length: 0. Clock time: 96.
+INFO:Message sent to 4056. Global time: 1678291047.2289338. Clock time: 97.
+INFO:Message received. Global time: 1678291047.7305238. Queue length: 1. Clock time: 98.
+INFO:Message received. Global time: 1678291048.2364411. Queue length: 1. Clock time: 99.
+INFO:Message received. Global time: 1678291048.742225. Queue length: 0. Clock time: 100.
+INFO:Message received. Global time: 1678291049.2460349. Queue length: 1. Clock time: 101.
+INFO:Message received. Global time: 1678291049.7487628. Queue length: 0. Clock time: 102.
+INFO:Internal event. Global time: 1678291050.253429. Clock time: 103.
+INFO:Message received. Global time: 1678291050.759304. Queue length: 1. Clock time: 104.
+INFO:Message received. Global time: 1678291051.264561. Queue length: 0. Clock time: 105.
+INFO:Internal event. Global time: 1678291051.767317. Clock time: 106.
+INFO:Internal event. Global time: 1678291052.272161. Clock time: 107.
+INFO:Internal event. Global time: 1678291052.774366. Clock time: 108.
