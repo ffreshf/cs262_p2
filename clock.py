@@ -8,7 +8,7 @@ from threading import Thread
 import logging
 import random
 
-master = {} # where key is the username and value is list of lists where index 0 of list is online/offline status, index 1 of list is messages that are queued and index 2 of their client connection 
+connections = [] # where key is the username and value is list of lists where index 0 of list is online/offline status, index 1 of list is messages that are queued and index 2 of their client connection 
 idx_of_list_of_connections = 0
 msg_queue = []
 
@@ -32,11 +32,10 @@ def consumer(conn):
         time.sleep(0.01)
 
         data = conn.recv(1024)
-        # i 
         if data:
             print("msg received\n")
             dataVal = data.decode('ascii')
-            print("msg received:", dataVal)
+            print("msg received: ", dataVal)
             msg_queue.append(dataVal)
 
 
@@ -68,7 +67,7 @@ def producer(portVal):
                 # if n == 1:
                 if code == 1:
                     # send to one of the other machines a message that is the local logical clock time
-                   # master[port][idx_of_list_of_connections][0].send("Message from port " + str(port) + ": the logical clock time is: " + str(clock) + "\n." ) 
+                    connections[0].send(("Message from port " + str(port) + ": the logical clock time is: " + str(clock) + "\n." ).encode('ascii')) 
                     print("Val is 1. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
                     logging.info("Val is 1. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
                     clock.increment()
@@ -76,20 +75,30 @@ def producer(portVal):
                 # elif n == 2:
                 elif code == 2:
                     # send to the other machine a message that is the local logical clock time
-                   # master[port][idx_of_list_of_connections][1].send("Message from port " + str(port) + ": the logical clock time is: " + str(clock) + "\n." ) 
-                    print("Val is 2. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
-                    logging.info("Val is 2. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
+                    if (len(connections) < 2):
+                        connections[0].send(("Message from port " + str(port) + ": the logical clock time is: " + str(clock) + "\n." ).encode('ascii')) 
+                        print("Val is 2. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
+                        logging.info("Val is 2. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
+                    elif (len(connections) == 2):
+                        connections[1].send(("Message from port " + str(port) + ": the logical clock time is: " + str(clock) + "\n." ).encode('ascii')) 
+                        print("\n\nVal is 2 AND OTHER MACHINE IS BEING SENT A MESSAGE. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
+                        logging.info("Val is 2. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
                     clock.increment()
                     # print("Message sent: " + time.time() + ", " + clock)
                 # elif n == 3:
                 elif code == 3:
-                   # master[port][idx_of_list_of_connections][0].send("Message from port " + str(port) + ": the logical clock time is: " + str(clock) + "\n." ) 
-                    print("Val is " + str(code) + ". Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
-                    logging.info("Val is 3. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
-                   # master[port][idx_of_list_of_connections][1].send("Message from port " + str(port) + ": the logical clock time is: " + str(clock) + "\n." ) 
-                    print("Val is " + str(code) + ". Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
+                    if (len(connections) < 2):
+                        connections[0].send(("Message from port " + str(port) + ": the logical clock time is: " + str(clock) + "\n." ).encode('ascii')) 
+                        print("Val is 3. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
+                        logging.info("Val is 2. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
+                    elif (len(connections) == 2):
+                        connections[0].send(("Message from port " + str(port) + ": the logical clock time is: " + str(clock) + "\n.").encode('ascii')) 
+                        print("\n\nVal is " + str(code) + " AND 2 MACHINES WILL BE SENT A MESSAGE AND I AM 1 of 2. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
+                        logging.info("Val is 3. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
 
-                    logging.info("Val is 3. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
+                        connections[1].send(("Message from port " + str(port) + ": the logical clock time is: " + str(clock) + "\n." ).encode('ascii')) 
+                        print("\n\nVal is " + str(code) + " AND 2 MACHINES WILL BE SENT A MESSAGE AND I AM 2 or 2. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
+                        logging.info("Val is 3. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
                     # send to both of the other virtual machines a message that is the logical clock time
                     clock.increment()
                     # print("Message sent: " + time.time() + ", " + clock)
@@ -113,7 +122,8 @@ def init_machine(config):
     while True:
         conn, addr = s.accept()
         # append list of connections to master
-        # master[PORT][idx_of_list_of_connections].append(conn)
+        # master[str(PORT)][idx_of_list_of_connections].append(conn)
+        connections.append(conn)
         start_new_thread(consumer, (conn,))
 
 def machine(config):
