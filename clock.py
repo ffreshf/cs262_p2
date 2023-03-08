@@ -11,6 +11,7 @@ import random
 connections = [] # where key is the username and value is list of lists where index 0 of list is online/offline status, index 1 of list is messages that are queued and index 2 of their client connection 
 idx_of_list_of_connections = 0
 msg_queue = []
+msg_lock = threading.Lock()
 
 class Clock:
     def __init__(self):
@@ -25,32 +26,42 @@ class Clock:
 
 # thread always listening for incoming messages and appends them on the queue
 def consumer(conn):
-    print("consumer accepted connection" + str(conn) + "\n")
-
+    global msg_queue
+    global msg_lock
     while True:
         # needs to be less than 1/6
         time.sleep(0.01)
 
         data = conn.recv(1024)
         if data:
-            print("msg received\n")
-            dataVal = data.decode('ascii')
-            print("msg received: ", dataVal)
-            msg_queue.append(dataVal)
+            decoded_msg = str(data.decode('ascii'))
+            print("msg received: ", decoded_msg)
+            msg_lock.acquire()
+            msg_queue.append(decoded_msg)
+            msg_lock.release()
 
 
 
-def producer(portVal):
-    host = "127.0.0.1"
-    port = int(portVal)
-    s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+def producer(portVal, consumerA, consumerB):
+    global msg_queue
+    global msg_lock
     sleepVal = 1/random.randint(1,6)
     clock = Clock()
-    # sema acquire
+
+    host = "127.0.0.1"
+    source = int(portVal)
+    machineA = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+   #  machineA.sendto()
+   # machineA.bind((host, consumerA))
+    machineB = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    # machineB.bind((host, consumerB))
     try:
-        s.connect((host,port))
-        print("Client-side connection success to port val:" + str(portVal) + "\n")
-        logging.basicConfig(filename="machine" + str(port1) + ".log", level=logging.DEBUG)
+        machineA.connect((host, source))
+        print("Process on port " + str(consumerA) + " successfully connected to port val:" + str(portVal) + "\n")
+        machineB.connect((host, source))
+        print("Process on port " + str(consumerB) + " successfully connected to port val:" + str(portVal) + "\n")
+        
+        logging.basicConfig(filename="machine" + str(source) + ".log", level=logging.DEBUG)
         while True:
             # opCode = str(code)
             time.sleep(sleepVal)
@@ -58,7 +69,9 @@ def producer(portVal):
             # print("msg sent", codeVal)
 
             if len(msg_queue) > 0:
+                msg_lock.acquire()
                 msg_queue.pop(0)
+                msg_lock.release()
                 print("Message received from queue which now has size: " + str(len(msg_queue)) + " at system time: " + str(time.time()) + " and at logical clock time of:" + str(clock.getTime()))
                 clock.increment()
             else:
@@ -66,40 +79,33 @@ def producer(portVal):
                 # n = random.randint(1,10)
                 # if n == 1:
                 if code == 1:
-                    # send to one of the other machines a message that is the local logical clock time
-                    connections[0].send(("Message from port " + str(port) + ": the logical clock time is: " + str(clock) + "\n." ).encode('ascii')) 
+                    # send to machine A a message that is the local logical clock time
+                    machineA.sendto(("Message from port " + str(source) + ": the logical clock time is: " + str(clock) + "\n." ).encode('ascii'), (host,consumerA)) 
                     print("Val is 1. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
                     logging.info("Val is 1. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
                     clock.increment()
                     # print("Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock))
                 # elif n == 2:
                 elif code == 2:
-                    # send to the other machine a message that is the local logical clock time
-                    if (len(connections) < 2):
-                        connections[0].send(("Message from port " + str(port) + ": the logical clock time is: " + str(clock) + "\n." ).encode('ascii')) 
-                        print("Val is 2. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
-                        logging.info("Val is 2. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
-                    elif (len(connections) == 2):
-                        connections[1].send(("Message from port " + str(port) + ": the logical clock time is: " + str(clock) + "\n." ).encode('ascii')) 
-                        print("\n\nVal is 2 AND OTHER MACHINE IS BEING SENT A MESSAGE. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
-                        logging.info("Val is 2. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
+                    # send to machine B a message that is the local logical clock time
+                    machineB.sendto(("Message from port " + str(source) + ": the logical clock time is: " + str(clock) + "\n." ).encode('ascii'), (host, consumerB)) 
+                    print("\n\nVal is 2 AND OTHER MACHINE IS BEING SENT A MESSAGE. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
+                    logging.info("Val is 2. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
+
                     clock.increment()
                     # print("Message sent: " + time.time() + ", " + clock)
                 # elif n == 3:
                 elif code == 3:
-                    if (len(connections) < 2):
-                        connections[0].send(("Message from port " + str(port) + ": the logical clock time is: " + str(clock) + "\n." ).encode('ascii')) 
-                        print("Val is 3. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
-                        logging.info("Val is 2. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
-                    elif (len(connections) == 2):
-                        connections[0].send(("Message from port " + str(port) + ": the logical clock time is: " + str(clock) + "\n.").encode('ascii')) 
-                        print("\n\nVal is " + str(code) + " AND 2 MACHINES WILL BE SENT A MESSAGE AND I AM 1 of 2. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
-                        logging.info("Val is 3. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
+                    # send to machine A a message that is the local logical clock time
+                    machineA.sendto(("Message from port " + str(source) + ": the logical clock time is: " + str(clock) + "\n." ).encode('ascii'), (host, consumerA)) 
+                    print("Val is " + str(code) + ". Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
+                    logging.info("Val is " + str(code) + ". Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
 
-                        connections[1].send(("Message from port " + str(port) + ": the logical clock time is: " + str(clock) + "\n." ).encode('ascii')) 
-                        print("\n\nVal is " + str(code) + " AND 2 MACHINES WILL BE SENT A MESSAGE AND I AM 2 or 2. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
-                        logging.info("Val is 3. Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
-                    # send to both of the other virtual machines a message that is the logical clock time
+                    # send to machine A a message that is the local logical clock time
+                    machineB.sendto(("Message from port " + str(source) + ": the logical clock time is: " + str(clock) + "\n." ).encode('ascii'), (host, consumerA)) 
+                    print("Val is " + str(code) + ". Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
+                    logging.info("Val is " + str(code) + ". Message sent at system time: " + str(time.time()) + " and with logical clock time of: " + str(clock.getTime()))
+
                     clock.increment()
                     # print("Message sent: " + time.time() + ", " + clock)
                 else:
@@ -121,9 +127,6 @@ def init_machine(config):
     s.listen()
     while True:
         conn, addr = s.accept()
-        # append list of connections to master
-        # master[str(PORT)][idx_of_list_of_connections].append(conn)
-        connections.append(conn)
         start_new_thread(consumer, (conn,))
 
 def machine(config):
@@ -138,7 +141,7 @@ def machine(config):
     time.sleep(5)
     
     # extensible to multiple producers 
-    prod_thread = Thread(target=producer, args=(config[2],))
+    prod_thread = Thread(target=producer, args=(config[2], config[1], config[3]))
     prod_thread.start()
     
     # while True: 
@@ -153,16 +156,13 @@ if __name__ == '__main__':
     port2 = 3056
     port3 = 4056
 
-    config1 = [localHost, port1, port2]
+    # format of config is localhost, consumer, producer, other machine (consumer)
+    config1 = [localHost, port1, port2, port3]
     p1 = Process(target=machine, args=(config1,))
-    config2 = [localHost, port2, port3]
+    config2 = [localHost, port2, port3, port1]
     p2 = Process(target=machine, args=(config2,))
-    config3 = [localHost, port3, port1]
+    config3 = [localHost, port3, port1, port2]
     p3 = Process(target=machine, args=(config3,))
-
-#    
- #   logging.basicConfig(filename='machine' + str(port2) + '.log', encoding='utf-8', level=logging.DEBUG)
-  #  logging.basicConfig(filename='machine' + str(port3) + '.log', encoding='utf-8', level=logging.DEBUG)
 
     p1.start()
     p2.start()
