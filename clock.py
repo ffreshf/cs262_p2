@@ -19,6 +19,7 @@ class Clock:
     def getTime(self):
         return self.time
 
+<<<<<<< Updated upstream
     # Update logical clock with respect to rules we learned in lecture
     def update(self, new):
         self.time = max(self.time, new) + 1 
@@ -27,6 +28,8 @@ class Clock:
     def increment(self): 
         self.time += 1
 
+=======
+>>>>>>> Stashed changes
 # thread always listening for incoming messages and appends them on the queue
 def consumer(conn):
     global msg_queue
